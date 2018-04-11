@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<!-- Global settings for App -->
+<node xmlns:f="mystyle">
+  
+  <InputValidity>
+    <!--  Unit:min -->
+    <lowestPeroidLimit>8</lowestPeroidLimit>
+    <highestPeroidLimit>15</highestPeroidLimit>
+    <instrumentStopPeroid>15</instrumentStopPeroid>
+  </InputValidity>
+
+  <ClientInformation>
+    <!--TcNav Client login data-->
+    <userID>manager</userID>
+    <password>manager</password>
+  </ClientInformation>
+
+  <InstruementInformation>
+    <!--Instrument Key-->
+    <instrumentKey >GC680</instrumentKey>
+  </InstruementInformation>
+
+  <FilePath>
+    <MethodFile></MethodFile>
+    <SequenceFile></SequenceFile>
+    <RawFile></RawFile>
+    <ResultFile></ResultFile>
+    <ExtractedFile></ExtractedFile>
+  </FilePath>
+  
+</node>
