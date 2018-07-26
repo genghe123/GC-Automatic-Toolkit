@@ -1,49 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Globalization;
 using System.IO;
+using System.Reflection;
 using Microsoft.Office.Interop.Excel;
 
 namespace GC_Automatic_ToolKit.Handler
 {
     public class ExcelHandle
     {
-        private string path, filename;
-        private Application app;
-        private Workbook workbook;
-        private Worksheet worksheet;
+        private string _path, _filename;
+        private Application _app;
+        private Workbook _workbook;
+        private Worksheet _worksheet;
 
         public ExcelHandle()
         {
-            path = Path.GetTempPath();
-            filename = DateTime.Now.ToString();
+            _path = Path.GetTempPath();
+            _filename = DateTime.Now.ToString(CultureInfo.CurrentCulture);
         }
         public ExcelHandle(string path,string filename)
         {
-            this.path = path;
-            this.filename = CheckFileName(filename);
+            this._path = path;
+            _filename = CheckFileName(filename);
         }
 
         private string CheckFileName(string filename)
         {
-            string p = null;
+            if (filename == null) return null;
             for(var i=0;i<100;i++)
             {
-                if (File.Exists(String.Concat(path,filename,".xlsx")))
-                { filename = String.Concat(filename, "_GC"); }
+                if (File.Exists(string.Concat(_path,filename,".xlsx")))
+                { filename = string.Concat(filename, "_GC"); }
                 else { break; }
             }
-            return p;
+            return filename;
         }
 
         public void CreateExcel()
         {
-            var nothing = System.Reflection.Missing.Value;
-            app = new Application();
-            app.Visible = true;
-            workbook = app.Workbooks.Add(nothing);
-            worksheet = (Worksheet)workbook.Sheets[1];
-            worksheet.Name = DateTime.Today.ToString("yyyy.MM.dd");
+            var nothing = Missing.Value;
+            _app = new Application {Visible = true};
+            _workbook = _app.Workbooks.Add(nothing);
+            _worksheet = (Worksheet)_workbook.Sheets[1];
+            _worksheet.Name = DateTime.Today.ToString("yyyy.MM.dd");
         }
         public void SaveExcel()
         {
@@ -53,18 +53,18 @@ namespace GC_Automatic_ToolKit.Handler
         public void CloseExcel(bool i)
         {
             if (i)  { SaveExcel(); }
-            worksheet = null;
-            workbook = null;
-            app.Quit();
-            app = null;
+            _worksheet = null;
+            _workbook = null;
+            _app.Quit();
+            _app = null;
         }
 
         public void AddStringDoublePair(IEnumerable<KeyValuePair<string, double>> pair,int x,int y)
         {
-            worksheet.Cells[x, y++] = DateTime.Now;
+            _worksheet.Cells[x, y++] = DateTime.Now;
             foreach(var data in pair)
             {
-                worksheet.Cells[x, y++] = data.Value;
+                _worksheet.Cells[x, y++] = data.Value;
             }
         }
     }

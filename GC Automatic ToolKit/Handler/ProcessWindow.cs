@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace GC_Automatic_ToolKit.Handler
 {
-    class ProcessWindowOperation
+    internal class ProcessWindowOperation
     {
         #region user32.dll import
 
@@ -60,17 +60,17 @@ namespace GC_Automatic_ToolKit.Handler
         internal void GetWindowPosition(string lpWindowName,out Rect rect)
         {
             //IntPtr hwnd = FindWindow(null, lpWindowName);
-            Process[] p = Process.GetProcessesByName(lpWindowName);
+            var p = Process.GetProcessesByName(lpWindowName);
             //IntPtr hwnd2=p[0].Handle;
-            IntPtr hwnd3 = p[0].MainWindowHandle;
+            var hwnd3 = p[0].MainWindowHandle;
             GetWindowRect(hwnd3,out rect);
             ShowWindow(hwnd3,1);
             SetForegroundWindow(hwnd3);
         }
         
-        internal void SimMouse_LeftClick(int x_relative,int y_relative,Rect windowLocation)
+        internal void SimMouse_LeftClick(int xRelative,int yRelative,Rect windowLocation)
         {
-            SetCursorPos(windowLocation.Left+x_relative,windowLocation.Top+y_relative);
+            SetCursorPos(windowLocation.Left+xRelative,windowLocation.Top+yRelative);
             mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
             mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
         }
@@ -78,25 +78,25 @@ namespace GC_Automatic_ToolKit.Handler
 
     class GC_Operation
     {
-        private ProcessWindowOperation process = new ProcessWindowOperation();
-        private ProcessWindowOperation.Rect rect = new ProcessWindowOperation.Rect();
-        private string proName;
+        private ProcessWindowOperation _process = new ProcessWindowOperation();
+        private ProcessWindowOperation.Rect _rect;
+        private string _proName;
 
         internal GC_Operation(string proName)
         {
-            this.proName = proName;
-            process.GetWindowPosition(proName, out rect);
+            _proName = proName;
+            _process.GetWindowPosition(proName, out _rect);
         }
 
         private void RunButton()
         {
             //Relocate Process Window Location.
-            process.GetWindowPosition(proName, out rect);
+            _process.GetWindowPosition(_proName, out _rect);
 
             //Run Button
             Thread.Sleep(100);
-            int x = 460; int y = 415;
-            process.SimMouse_LeftClick(x, y, rect);
+            var x = 460; var y = 415;
+            _process.SimMouse_LeftClick(x, y, _rect);
         }
          
         internal void Start_Run()
@@ -106,7 +106,7 @@ namespace GC_Automatic_ToolKit.Handler
             Thread.Sleep(100);
             //int x = 500;int y = 395;
             int x = 24, y = 104;
-            process.SimMouse_LeftClick(x, y, rect);
+            _process.SimMouse_LeftClick(x, y, _rect);
         } 
         
         internal void Stop_Run()
@@ -116,7 +116,7 @@ namespace GC_Automatic_ToolKit.Handler
             Thread.Sleep(100);
             //int x = 500;int y = 420;
             int x = 48, y = 104;
-            process.SimMouse_LeftClick(x, y, rect);
+            _process.SimMouse_LeftClick(x, y, _rect);
             Thread.Sleep(100);
             //x = 415;y = 355;
             //process.SimMouse_LeftClick(x, y, rect);

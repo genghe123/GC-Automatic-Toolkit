@@ -1,4 +1,4 @@
-﻿namespace GC_Automatic_ToolKit.UserInterface
+﻿namespace GC_Automatic_ToolKit
 {
     partial class MainForm
     {
@@ -46,6 +46,9 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.Lock_checkBox = new System.Windows.Forms.CheckBox();
+            this.ProgramName_label = new System.Windows.Forms.Label();
+            this.ProgramName_textbox = new System.Windows.Forms.TextBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.menuStrip1.SuspendLayout();
@@ -76,7 +79,7 @@
             // 
             // Peroid_textbox
             // 
-            this.Peroid_textbox.Location = new System.Drawing.Point(4, 39);
+            this.Peroid_textbox.Location = new System.Drawing.Point(8, 77);
             this.Peroid_textbox.Margin = new System.Windows.Forms.Padding(2);
             this.Peroid_textbox.Name = "Peroid_textbox";
             this.Peroid_textbox.Size = new System.Drawing.Size(68, 21);
@@ -86,18 +89,18 @@
             // 
             // WaitingTime
             // 
-            this.WaitingTime.Location = new System.Drawing.Point(4, 117);
+            this.WaitingTime.Location = new System.Drawing.Point(8, 155);
             this.WaitingTime.Margin = new System.Windows.Forms.Padding(2);
             this.WaitingTime.Name = "WaitingTime";
             this.WaitingTime.Size = new System.Drawing.Size(68, 21);
             this.WaitingTime.TabIndex = 4;
-            this.toolTip1.SetToolTip(this.WaitingTime, "GC采样完成后至下次进样前等待时间\r\nDefault:30s");
+            this.toolTip1.SetToolTip(this.WaitingTime, "GC采样完成后至下次进样前等待时间\r\nDefault: 3min");
             this.WaitingTime.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Sequence_textbox_KeyPress);
             // 
             // Peroid_label
             // 
             this.Peroid_label.AutoSize = true;
-            this.Peroid_label.Location = new System.Drawing.Point(4, 23);
+            this.Peroid_label.Location = new System.Drawing.Point(8, 61);
             this.Peroid_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Peroid_label.Name = "Peroid_label";
             this.Peroid_label.Size = new System.Drawing.Size(29, 12);
@@ -107,7 +110,7 @@
             // Waiting_Before_NextRun_label
             // 
             this.Waiting_Before_NextRun_label.AutoSize = true;
-            this.Waiting_Before_NextRun_label.Location = new System.Drawing.Point(4, 101);
+            this.Waiting_Before_NextRun_label.Location = new System.Drawing.Point(8, 139);
             this.Waiting_Before_NextRun_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Waiting_Before_NextRun_label.Name = "Waiting_Before_NextRun_label";
             this.Waiting_Before_NextRun_label.Size = new System.Drawing.Size(113, 12);
@@ -116,11 +119,11 @@
             // 
             // Log
             // 
-            this.Log.Location = new System.Drawing.Point(146, 52);
+            this.Log.Location = new System.Drawing.Point(153, 52);
             this.Log.Margin = new System.Windows.Forms.Padding(2);
             this.Log.Name = "Log";
             this.Log.ReadOnly = true;
-            this.Log.Size = new System.Drawing.Size(214, 184);
+            this.Log.Size = new System.Drawing.Size(207, 184);
             this.Log.TabIndex = 6;
             this.Log.TabStop = false;
             this.Log.Text = "";
@@ -150,7 +153,7 @@
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -172,7 +175,7 @@
             // 
             // RunTimes_textbox
             // 
-            this.RunTimes_textbox.Location = new System.Drawing.Point(4, 77);
+            this.RunTimes_textbox.Location = new System.Drawing.Point(8, 115);
             this.RunTimes_textbox.Margin = new System.Windows.Forms.Padding(2);
             this.RunTimes_textbox.Name = "RunTimes_textbox";
             this.RunTimes_textbox.Size = new System.Drawing.Size(68, 21);
@@ -183,7 +186,7 @@
             // RunTimes_label
             // 
             this.RunTimes_label.AutoSize = true;
-            this.RunTimes_label.Location = new System.Drawing.Point(6, 63);
+            this.RunTimes_label.Location = new System.Drawing.Point(10, 101);
             this.RunTimes_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RunTimes_label.Name = "RunTimes_label";
             this.RunTimes_label.Size = new System.Drawing.Size(53, 12);
@@ -194,6 +197,9 @@
             // 
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.Lock_checkBox);
+            this.groupBox1.Controls.Add(this.ProgramName_label);
+            this.groupBox1.Controls.Add(this.ProgramName_textbox);
             this.groupBox1.Controls.Add(this.WaitingTime);
             this.groupBox1.Controls.Add(this.RunTimes_label);
             this.groupBox1.Controls.Add(this.Waiting_Before_NextRun_label);
@@ -204,7 +210,7 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(125, 190);
+            this.groupBox1.Size = new System.Drawing.Size(125, 189);
             this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "设置";
@@ -212,7 +218,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(75, 121);
+            this.label2.Location = new System.Drawing.Point(79, 159);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(23, 12);
@@ -222,12 +228,42 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(75, 43);
+            this.label1.Location = new System.Drawing.Point(79, 81);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(23, 12);
             this.label1.TabIndex = 14;
             this.label1.Text = "min";
+            // 
+            // Lock_checkBox
+            // 
+            this.Lock_checkBox.AutoSize = true;
+            this.Lock_checkBox.Location = new System.Drawing.Point(89, 41);
+            this.Lock_checkBox.Margin = new System.Windows.Forms.Padding(2);
+            this.Lock_checkBox.Name = "Lock_checkBox";
+            this.Lock_checkBox.Size = new System.Drawing.Size(15, 14);
+            this.Lock_checkBox.TabIndex = 13;
+            this.Lock_checkBox.UseVisualStyleBackColor = true;
+            this.Lock_checkBox.CheckedChanged += new System.EventHandler(this.Lock_checkBox_CheckedChanged);
+            // 
+            // ProgramName_label
+            // 
+            this.ProgramName_label.AutoSize = true;
+            this.ProgramName_label.Location = new System.Drawing.Point(10, 23);
+            this.ProgramName_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.ProgramName_label.Name = "ProgramName_label";
+            this.ProgramName_label.Size = new System.Drawing.Size(41, 12);
+            this.ProgramName_label.TabIndex = 12;
+            this.ProgramName_label.Text = "进程名";
+            // 
+            // ProgramName_textbox
+            // 
+            this.ProgramName_textbox.Location = new System.Drawing.Point(8, 39);
+            this.ProgramName_textbox.Margin = new System.Windows.Forms.Padding(2);
+            this.ProgramName_textbox.Name = "ProgramName_textbox";
+            this.ProgramName_textbox.Size = new System.Drawing.Size(68, 21);
+            this.ProgramName_textbox.TabIndex = 1;
+            this.ProgramName_textbox.Text = "网络色谱工作站";
             // 
             // notifyIcon1
             // 
@@ -278,6 +314,9 @@
         private System.Windows.Forms.Label RunTimes_label;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.CheckBox Lock_checkBox;
+        private System.Windows.Forms.Label ProgramName_label;
+        private System.Windows.Forms.TextBox ProgramName_textbox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolTip toolTip1;
