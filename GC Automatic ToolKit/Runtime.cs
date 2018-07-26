@@ -1,23 +1,24 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using GC_Automatic_ToolKit.GCConfig;
 using GC_Automatic_ToolKit.Handler;
 using GC_Automatic_ToolKit.UserInterface;
+using Timer = System.Timers.Timer;
 
 namespace GC_Automatic_ToolKit
 {
     internal static class Runtime
     {
-        private static PerkinElmerConfig gc = null;
-        private static ExcelHandle excelhandle = null;
-        private static Task posthandle = null;
-        private static CancellationTokenSource cancellation = null;
-        private static System.Timers.Timer timer = null;
-        private static System.Timers.Timer bartimer = null;
+        private static ExcelHandle _excelhandle;
+        private static Task _posthandle;
+        private static CancellationTokenSource _cancellation;
+        private static Timer _timer;
+        private static Timer bartimer;
         private static MainForm form;
 
 
@@ -25,43 +26,43 @@ namespace GC_Automatic_ToolKit
         static Runtime()
         {
             form = Program.form;
-            excelhandle = new ExcelHandle();
-            excelhandle.CreateExcel();
-            cancellation = new CancellationTokenSource();
-            timer = new System.Timers.Timer();
-            bartimer = new System.Timers.Timer();
+            _excelhandle = new ExcelHandle();
+            _excelhandle.CreateExcel();
+            _cancellation = new CancellationTokenSource();
+            _timer = new Timer();
+            bartimer = new Timer();
 
-            timer.AutoReset = true;
-            timer.Elapsed += new ElapsedEventHandler(Timer_Elapsed);
+            _timer.AutoReset = true;
+            _timer.Elapsed += Timer_Elapsed;
 
             bartimer.AutoReset = true;
-            bartimer.Elapsed += new ElapsedEventHandler(Bartimer_Elapsed);
+            bartimer.Elapsed += Bartimer_Elapsed;
         }
 
-        internal static PerkinElmerConfig Gc { get => gc; set => gc = value; }
+        internal static PerkinElmerConfig Gc { get; set; }
 
         internal static void Run(PerkinElmerConfig config)
         {
             Gc = config;
             Check();
-            cancellation.CancelAfter(TimeSpan.FromMilliseconds(Gc.Peroid + Gc.Interval));
+            _cancellation.CancelAfter(TimeSpan.FromMilliseconds((Gc.Peroid + Gc.Interval) * 60000));
             Start();
         }
 
         private static void Start()
         {
-            GCHandleAcqClient.StartRun(Gc.Key);
-            timer.Interval = Gc.Peroid;
-            bartimer.Interval = Gc.Peroid / 100;
-            timer.Start();
+            GCHandleAcqClient.StartRun(Gc.InstrumentKey);
+            _timer.Interval = Gc.Peroid * 60000;
+            bartimer.Interval = _timer.Interval / 100;
+            _timer.Start();
             bartimer.Start();
         }
 
         internal static void Tick()
         {
             Thread.Sleep(5000);
-            GCHandleAcqClient.StopRun(Gc.Key);
-            posthandle = Task.Run(() => ReadDataFromRstFile(Gc.ResultPath, cancellation.Token));
+            GCHandleAcqClient.StopRun(Gc.InstrumentKey);
+            _posthandle = Task.Run(() => ReadDataFromRstFile(Gc.ResultPath, _cancellation.Token));
             //ReadDataFromRstFile(Gc.ResultPath, cancellation.Token);
 
             if (++Gc.K < Gc.Max)
@@ -88,7 +89,7 @@ namespace GC_Automatic_ToolKit
             {
                 form.Output(e.ToString());
             }
-            catch (System.Security.SecurityException e)
+            catch (SecurityException e)
             {
                 form.Output(e.ToString());
             }
@@ -102,19 +103,19 @@ namespace GC_Automatic_ToolKit
                          orderby f.CreationTime descending
                          select f).Take(1).ToArray();
 
-            var result = GcHandleTcAccess.ReadAllPeaksAreaFromRst(lastestFile[0].FullName);
-            excelhandle.AddStringDoublePair(result, Gc.K, 2);
+            var result = GcHandleTcAccess.ReadAllPeaksAreaFromRst(lastestFile[0].FullName, Gc);
+            _excelhandle.AddStringDoublePair(result, Gc.K, 2);
             return true;
         }
 
         private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            timer.Stop();
+            _timer.Stop();
             bartimer.Stop();
             form.ProgressBarReset();
             form.Output(Convert.ToString(Gc.K) + " times completed.");
             Tick();
-            timer.Start();
+            _timer.Start();
             bartimer.Start();
         }
 
@@ -125,7 +126,7 @@ namespace GC_Automatic_ToolKit
 
         private static void Check()
         {
-            if (gc == null)
+            if (Gc == null)
             {
                 throw new MethodAccessException();
             }

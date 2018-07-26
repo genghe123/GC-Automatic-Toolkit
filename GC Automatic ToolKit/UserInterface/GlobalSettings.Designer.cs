@@ -34,7 +34,6 @@
             this.txtbox_UserName = new System.Windows.Forms.TextBox();
             this.lab_Password = new System.Windows.Forms.Label();
             this.txtbox_password = new System.Windows.Forms.TextBox();
-            this.checkbox_saveinformation = new System.Windows.Forms.CheckBox();
             this.btn_Apply = new System.Windows.Forms.Button();
             this.btn_Cancel = new System.Windows.Forms.Button();
             this.lab_rstFilePath = new System.Windows.Forms.Label();
@@ -91,16 +90,6 @@
             this.txtbox_password.TabIndex = 2;
             this.txtbox_password.UseSystemPasswordChar = true;
             // 
-            // checkbox_saveinformation
-            // 
-            this.checkbox_saveinformation.AutoSize = true;
-            this.checkbox_saveinformation.Location = new System.Drawing.Point(41, 121);
-            this.checkbox_saveinformation.Name = "checkbox_saveinformation";
-            this.checkbox_saveinformation.Size = new System.Drawing.Size(120, 16);
-            this.checkbox_saveinformation.TabIndex = 4;
-            this.checkbox_saveinformation.Text = "Save Information";
-            this.checkbox_saveinformation.UseVisualStyleBackColor = true;
-            // 
             // btn_Apply
             // 
             this.btn_Apply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -149,7 +138,6 @@
             this.Controls.Add(this.lab_rstFilePath);
             this.Controls.Add(this.btn_Cancel);
             this.Controls.Add(this.btn_Apply);
-            this.Controls.Add(this.checkbox_saveinformation);
             this.Controls.Add(this.txtbox_password);
             this.Controls.Add(this.lab_Password);
             this.Controls.Add(this.txtbox_UserName);
@@ -171,7 +159,6 @@
         private System.Windows.Forms.TextBox txtbox_UserName;
         private System.Windows.Forms.Label lab_Password;
         private System.Windows.Forms.TextBox txtbox_password;
-        private System.Windows.Forms.CheckBox checkbox_saveinformation;
         private System.Windows.Forms.Button btn_Apply;
         private System.Windows.Forms.Button btn_Cancel;
         private System.Windows.Forms.Label lab_rstFilePath;

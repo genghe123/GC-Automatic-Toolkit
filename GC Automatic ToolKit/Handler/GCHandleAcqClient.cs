@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using Microsoft.VisualBasic;
 using PnwAcqClient;
@@ -9,9 +10,9 @@ namespace GC_Automatic_ToolKit.Handler
 {
     internal static class GCHandleAcqClient
     {
-        private static IPnwAcqClient acqClient = null;
-        private static object data = null;
-        private static Regex regex = null;
+        private static IPnwAcqClient _acqClient;
+        private static object _data;
+        private static Regex _regex;
 
         [DllImport("user32.dll", ExactSpelling = true)]
         private static extern uint CallWindowProc(int lpPrevWndFunc, IntPtr hwnd, uint msg, uint wParam, uint lParam);
@@ -23,11 +24,11 @@ namespace GC_Automatic_ToolKit.Handler
         {
             try
             {
-                acqClient = (IPnwAcqClient)Interaction.GetObject(null, "TCAcqClient.Server");
+                _acqClient = (IPnwAcqClient)Interaction.GetObject(null, "TCAcqClient.Server");
             }
             catch (Exception)
             {
-                acqClient = (IPnwAcqClient)Interaction.CreateObject("TcAcqClient.Server");
+                _acqClient = (IPnwAcqClient)Interaction.CreateObject("TcAcqClient.Server");
             }
         }
 
@@ -40,7 +41,7 @@ namespace GC_Automatic_ToolKit.Handler
                 Thread.Sleep(10 * 1000);
             }
 
-            return acqClient.SendCommand(bstInstKey, (int)PnwInstCmdTypes.ePnwInstCmdStartRun, ref data);
+            return _acqClient.SendCommand(bstInstKey, (int)PnwInstCmdTypes.ePnwInstCmdStartRun, ref _data);
         }
 
         internal static bool StopRun(string bstInstKey)
@@ -48,7 +49,7 @@ namespace GC_Automatic_ToolKit.Handler
             ConnectToAcqClient();
 
             if (GetGCStatus(bstInstKey) != PnwGcStates.ePnwGcStateRun) return true;
-            return acqClient.SendCommand(bstInstKey, (int)PnwInstCmdTypes.ePnwInstCmdStopRun, ref data);
+            return _acqClient.SendCommand(bstInstKey, (int)PnwInstCmdTypes.ePnwInstCmdStopRun, ref _data);
         }
 
         
@@ -56,7 +57,7 @@ namespace GC_Automatic_ToolKit.Handler
         {
             ConnectToAcqClient();
 
-            var status = acqClient.GetStatusData(bstInstKey, (int)PnwStatusDataTypes.ePnwStatusDataGc, ref data);
+            var status = _acqClient.GetStatusData(bstInstKey, (int)PnwStatusDataTypes.ePnwStatusDataGc, ref _data);
             // To Newcomers,
             // I tried to use bulit-in structs (e.g. PnwStatusDataGcPub...) to parse retrived object "data" into these structs,
             // using "ByteToStruct()" method. Unfortunately, all these attempts failed in the end. It seems that retrived data
@@ -74,7 +75,7 @@ namespace GC_Automatic_ToolKit.Handler
             // @ Author: HermanGeng
             // @ E-mail: genghe123@sina.com
             // @ Date:   2017-12-21 
-            return (PnwGcStates)Enum.ToObject(typeof(PnwGcStates), Convert.ToInt32(((byte[])data)[4]));
+            return (PnwGcStates)Enum.ToObject(typeof(PnwGcStates), Convert.ToInt32(((byte[])_data)[4]));
 
             //var statusstrings = System.Text.Encoding.ASCII.GetString((byte[])data);
             //var temp = BytesToStruct<PnwStatusDataGcPub>((byte[])data);   //Always fails...
@@ -83,12 +84,12 @@ namespace GC_Automatic_ToolKit.Handler
         internal static string GetResultFilePath(string bstInstKey)
         {
             ConnectToAcqClient();
-            var status = acqClient.GetSequenceData(bstInstKey, (int)PnwSeqDataTypes.ePnwSeqDataAll, ref data);
-            var resultstring = System.Text.Encoding.ASCII.GetString((byte[])data);
+            var status = _acqClient.GetSequenceData(bstInstKey, (int)PnwSeqDataTypes.ePnwSeqDataAll, ref _data);
+            var resultstring = Encoding.ASCII.GetString((byte[])_data);
             //var seq = BytesToStruct((byte[])data,typeof( PnwSeqDataPub));
             const string pattern = @"mth.*?(?<RawFile>\w{1}:[^:]*)(?<ResultFile>\w{1}:([\w\d\\\s`\!\@\#\$\%\^\&\*\+\-=_\./]+))";
-            regex = new Regex(pattern);
-            var match = regex.Match(resultstring);
+            _regex = new Regex(pattern);
+            var match = _regex.Match(resultstring);
             return match.Groups["ResultFile"].Value;
         }
 
@@ -98,7 +99,7 @@ namespace GC_Automatic_ToolKit.Handler
             return acqClient.RegisterForInstEvents(, bstInstKey, (int)PnwInstEventTypes.ePnwInstEventInstStateChanged);
         }
         */
-        
+
         private static object BytesToStruct(byte[] bytes, Type type)
         {
             var size = Math.Max(Marshal.SizeOf(type),bytes.GetLength(0));

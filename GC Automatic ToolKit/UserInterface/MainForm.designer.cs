@@ -76,7 +76,7 @@
             // 
             // Peroid_textbox
             // 
-            this.Peroid_textbox.Location = new System.Drawing.Point(8, 77);
+            this.Peroid_textbox.Location = new System.Drawing.Point(4, 39);
             this.Peroid_textbox.Margin = new System.Windows.Forms.Padding(2);
             this.Peroid_textbox.Name = "Peroid_textbox";
             this.Peroid_textbox.Size = new System.Drawing.Size(68, 21);
@@ -86,7 +86,7 @@
             // 
             // WaitingTime
             // 
-            this.WaitingTime.Location = new System.Drawing.Point(8, 155);
+            this.WaitingTime.Location = new System.Drawing.Point(4, 117);
             this.WaitingTime.Margin = new System.Windows.Forms.Padding(2);
             this.WaitingTime.Name = "WaitingTime";
             this.WaitingTime.Size = new System.Drawing.Size(68, 21);
@@ -97,7 +97,7 @@
             // Peroid_label
             // 
             this.Peroid_label.AutoSize = true;
-            this.Peroid_label.Location = new System.Drawing.Point(8, 61);
+            this.Peroid_label.Location = new System.Drawing.Point(4, 23);
             this.Peroid_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Peroid_label.Name = "Peroid_label";
             this.Peroid_label.Size = new System.Drawing.Size(29, 12);
@@ -107,7 +107,7 @@
             // Waiting_Before_NextRun_label
             // 
             this.Waiting_Before_NextRun_label.AutoSize = true;
-            this.Waiting_Before_NextRun_label.Location = new System.Drawing.Point(8, 139);
+            this.Waiting_Before_NextRun_label.Location = new System.Drawing.Point(4, 101);
             this.Waiting_Before_NextRun_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Waiting_Before_NextRun_label.Name = "Waiting_Before_NextRun_label";
             this.Waiting_Before_NextRun_label.Size = new System.Drawing.Size(113, 12);
@@ -150,7 +150,7 @@
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -172,7 +172,7 @@
             // 
             // RunTimes_textbox
             // 
-            this.RunTimes_textbox.Location = new System.Drawing.Point(8, 115);
+            this.RunTimes_textbox.Location = new System.Drawing.Point(4, 77);
             this.RunTimes_textbox.Margin = new System.Windows.Forms.Padding(2);
             this.RunTimes_textbox.Name = "RunTimes_textbox";
             this.RunTimes_textbox.Size = new System.Drawing.Size(68, 21);
@@ -183,7 +183,7 @@
             // RunTimes_label
             // 
             this.RunTimes_label.AutoSize = true;
-            this.RunTimes_label.Location = new System.Drawing.Point(10, 101);
+            this.RunTimes_label.Location = new System.Drawing.Point(6, 63);
             this.RunTimes_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RunTimes_label.Name = "RunTimes_label";
             this.RunTimes_label.Size = new System.Drawing.Size(53, 12);
@@ -204,7 +204,7 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(125, 189);
+            this.groupBox1.Size = new System.Drawing.Size(125, 190);
             this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "设置";
@@ -212,7 +212,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(79, 159);
+            this.label2.Location = new System.Drawing.Point(75, 121);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(23, 12);
@@ -222,7 +222,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(79, 81);
+            this.label1.Location = new System.Drawing.Point(75, 43);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(23, 12);

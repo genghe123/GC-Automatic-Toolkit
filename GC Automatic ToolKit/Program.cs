@@ -14,14 +14,10 @@ namespace GC_Automatic_ToolKit
         [STAThread]
         static void Main()
         {
-            if (DateTime.Now > new DateTime(2019, 9, 13))
-                return;
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             form = new MainForm();
             Application.Run(form);
-
         }
     }
 }

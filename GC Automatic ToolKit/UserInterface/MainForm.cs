@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Timers;
 using System.Windows.Forms;
+using GC_Automatic_ToolKit.GCConfig;
+using GC_Automatic_ToolKit.Handler;
 
 namespace GC_Automatic_ToolKit.UserInterface
 {
     public partial class MainForm : Form
     {
-        //private GC_Operation GC1;
-        private GCConfig.PerkinElmerConfig GC;
+        private PerkinElmerConfig _gc;
 
         public MainForm()
         {
@@ -16,16 +16,15 @@ namespace GC_Automatic_ToolKit.UserInterface
 
         private void Apply_button_Click(object sender, EventArgs e)
         {
-            GC = new GCConfig.PerkinElmerConfig("GC680");
+            _gc = XmlHandle.XmlRead();
 
             #region Check validity of data input
-            GC.Peroid = double.TryParse(Peroid_textbox.Text, out double peroid) ? peroid : 15;
-            GC.Interval = double.TryParse(WaitingTime.Text, out double interal) ? interal : 0.5;
-            GC.Max = int.TryParse(RunTimes_textbox.Text, out int max) ? max : 1;
+            _gc.Peroid = double.TryParse(Peroid_textbox.Text, out double peroid) ? peroid : 15;
+            _gc.Interval = double.TryParse(WaitingTime.Text, out double interal) ? interal : 3;
+            _gc.Max = int.TryParse(RunTimes_textbox.Text, out int max) ? max : 1;
             #endregion
 
-            //GC1.Start_Run();
-            Runtime.Run(GC);
+            Runtime.Run(_gc);
         }
 
         private void Cancel_button_Click(object sender, EventArgs e)
@@ -41,7 +40,7 @@ namespace GC_Automatic_ToolKit.UserInterface
             if (Log.InvokeRequired)
             {
                 var logadd = new Action<String>(Output);
-                Invoke(logadd, new object[] { log });
+                Invoke(logadd, log);
             }
             else
             {
@@ -83,7 +82,7 @@ namespace GC_Automatic_ToolKit.UserInterface
             {
                 var t = new Action<TextBox>(TextBoxChangeLockState);
 
-                this.Invoke(t, new object[] { textbox });
+                Invoke(t, textbox);
             }
             else
             {
@@ -93,7 +92,7 @@ namespace GC_Automatic_ToolKit.UserInterface
 
         private void Sequence_textbox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!(Char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)8) && (e.KeyChar != '.'))
+            if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)8) && (e.KeyChar != '.'))
             {
                 e.Handled = true;
                 Output("Sequence:Please input number");
@@ -102,7 +101,7 @@ namespace GC_Automatic_ToolKit.UserInterface
 
         private void Peroid_textbox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!(Char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)8) && (e.KeyChar != '.'))
+            if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)8) && (e.KeyChar != '.'))
             {
                 e.Handled = true;
                 Output("Peroid:Please input number");
@@ -111,7 +110,7 @@ namespace GC_Automatic_ToolKit.UserInterface
 
         private void RunTimes_textbox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!(Char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)8))
+            if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)8))
             {
                 e.Handled = true;
                 Output("RunTimes:Please input number");
@@ -120,7 +119,7 @@ namespace GC_Automatic_ToolKit.UserInterface
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GlobalSettings globalSettings = new GlobalSettings();
+            var globalSettings = new GlobalSettings();
             globalSettings.ShowDialog();
         }
     }
