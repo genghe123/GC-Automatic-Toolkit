@@ -3,13 +3,14 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Microsoft.VisualBasic;
 using PnwAcqClient;
 
 namespace GC_Automatic_ToolKit.Handler
 {
     internal static class GCHandleAcqClient
     {
+        private static log4net.ILog log = log4net.LogManager.GetLogger("GCHandleAcqClient");
+
         private static IPnwAcqClient _acqClient;
         private static object _data;
         private static Regex _regex;
@@ -20,16 +21,24 @@ namespace GC_Automatic_ToolKit.Handler
         [DllImport("user32.dll", EntryPoint = "SetWindowLong")]
         public static extern int SetWindowLong(int hwnd, int nIndex, int dwNewLong);
 
-        private static void ConnectToAcqClient()
+        public static void ConnectToAcqClient()
         {
+            log.Debug("Initializing acqClient");
+
             try
             {
-                _acqClient = (IPnwAcqClient)Interaction.GetObject(null, "TCAcqClient.Server");
+                //_acqClient = (IPnwAcqClient)Interaction.GetObject(null, "TCAcqClient.Server");
+                _acqClient = (IPnwAcqClient)Marshal.GetActiveObject("TCAcqClient.Server");
+                log.Debug("Get TCAcqClient.Server");
             }
             catch (Exception)
             {
-                _acqClient = (IPnwAcqClient)Interaction.CreateObject("TcAcqClient.Server");
+                //_acqClient = (IPnwAcqClient)Interaction.CreateObject("TCAcqClient.Server");
+                _acqClient = (IPnwAcqClient)Activator.CreateInstance(Type.GetTypeFromProgID("TCAcqClient.Server"));
+                log.Debug("Create TCAcqClient.Server");
             }
+            log.Info("Initialized TCAcqClient.Server");
+            log.Debug("Server Status=" + Enum.ToObject(typeof(PnwServerStateTypes), _acqClient.GetServerState()));
         }
 
         internal static bool StartRun(string bstInstKey)
@@ -57,7 +66,13 @@ namespace GC_Automatic_ToolKit.Handler
         {
             ConnectToAcqClient();
 
+            log.Debug("InstrumentKey=" + bstInstKey);
+            log.Debug("DataToGet: " + PnwStatusDataTypes.ePnwStatusDataGc + "  " + (int)PnwStatusDataTypes.ePnwStatusDataGc);
+
             var status = _acqClient.GetStatusData(bstInstKey, (int)PnwStatusDataTypes.ePnwStatusDataGc, ref _data);
+            log.Debug("GetGCStatus=" + status);
+            log.Debug("Retrived Data=" + _data);
+
             // To Newcomers,
             // I tried to use bulit-in structs (e.g. PnwStatusDataGcPub...) to parse retrived object "data" into these structs,
             // using "ByteToStruct()" method. Unfortunately, all these attempts failed in the end. It seems that retrived data
@@ -84,8 +99,16 @@ namespace GC_Automatic_ToolKit.Handler
         internal static string GetResultFilePath(string bstInstKey)
         {
             ConnectToAcqClient();
+
+            log.Debug("InstrumentKey: " + bstInstKey);
+            log.Debug("DataToGet: " + PnwSeqDataTypes.ePnwSeqDataAll + "  " + (int)PnwSeqDataTypes.ePnwSeqDataAll);
+
             var status = _acqClient.GetSequenceData(bstInstKey, (int)PnwSeqDataTypes.ePnwSeqDataAll, ref _data);
             var resultstring = Encoding.ASCII.GetString((byte[])_data);
+
+            log.Debug("ResultFilePathStatus=" + status);
+            log.Debug("ResultFilePathRetriveString=" + resultstring);
+
             //var seq = BytesToStruct((byte[])data,typeof( PnwSeqDataPub));
             const string pattern = @"mth.*?(?<RawFile>\w{1}:[^:]*)(?<ResultFile>\w{1}:([\w\d\\\s`\!\@\#\$\%\^\&\*\+\-=_\./]+))";
             _regex = new Regex(pattern);
