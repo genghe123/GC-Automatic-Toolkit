@@ -9,6 +9,8 @@ namespace GC_Automatic_ToolKit.Handler
     internal static class GcHandleTcAccess
     {
 
+        private static log4net.ILog log = log4net.LogManager.GetLogger("GcHandleTcAccess");
+
         static GcHandleTcAccess()
         {
 
