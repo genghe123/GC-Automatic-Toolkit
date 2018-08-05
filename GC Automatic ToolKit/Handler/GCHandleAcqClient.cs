@@ -66,6 +66,8 @@ namespace GC_Automatic_ToolKit.Handler
         {
             ConnectToAcqClient();
 
+            var data = Activator.CreateInstance(typeof(PnwStatusDataGcPub));
+
             log.Debug("InstrumentKey=" + bstInstKey);
             log.Debug("DataToGet: " + PnwStatusDataTypes.ePnwStatusDataGc + "  " + (int)PnwStatusDataTypes.ePnwStatusDataGc);
 
@@ -90,6 +92,9 @@ namespace GC_Automatic_ToolKit.Handler
             // @ Author: HermanGeng
             // @ E-mail: genghe123@sina.com
             // @ Date:   2017-12-21 
+
+            // But now, there exists a more elegent way to solve this problem, that is using Activator to create an instance of specified struct.
+            //todo
             return (PnwGcStates)Enum.ToObject(typeof(PnwGcStates), Convert.ToInt32(((byte[])_data)[4]));
 
             //var statusstrings = System.Text.Encoding.ASCII.GetString((byte[])data);
