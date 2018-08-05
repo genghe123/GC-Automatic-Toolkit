@@ -46,14 +46,14 @@ namespace GC_Automatic_ToolKit
             Gc = config;
             Check();
             _cancellation.CancelAfter(TimeSpan.FromMilliseconds((Gc.Peroid + Gc.Interval) * 60000));
+            _timer.Interval = Gc.Peroid * 60000;
+            bartimer.Interval = _timer.Interval / 100;
             Start();
         }
 
         private static void Start()
         {
             GCHandleAcqClient.StartRun(Gc.InstrumentKey);
-            _timer.Interval = Gc.Peroid * 60000;
-            bartimer.Interval = _timer.Interval / 100;
             _timer.Start();
             bartimer.Start();
         }
@@ -65,7 +65,7 @@ namespace GC_Automatic_ToolKit
             _posthandle = Task.Run(() => ReadDataFromRstFile(Gc.ResultPath, _cancellation.Token));
             //ReadDataFromRstFile(Gc.ResultPath, cancellation.Token);
 
-            if (++Gc.K < Gc.Max)
+            if (++Gc.K <= Gc.Max)
             {
                 Thread.Sleep((int)(Gc.Interval));
                 Start();
@@ -115,8 +115,7 @@ namespace GC_Automatic_ToolKit
             form.ProgressBarReset();
             form.Output(Convert.ToString(Gc.K) + " times completed.");
             Tick();
-            _timer.Start();
-            bartimer.Start();
+
         }
 
         public static void Bartimer_Elapsed(object sender, ElapsedEventArgs e)
