@@ -20,7 +20,7 @@ namespace GC_Automatic_ToolKit.UserInterface
 
             #region Check validity of data input
             _gc.Peroid = double.TryParse(Peroid_textbox.Text, out double peroid) ? peroid : 15;
-            _gc.Interval = double.TryParse(WaitingTime.Text, out double interal) ? interal : 3;
+            _gc.Interval = double.TryParse(WaitingTime.Text, out double interal) ? interal : 0;
             _gc.Max = int.TryParse(RunTimes_textbox.Text, out int max) ? max : 1;
             #endregion
 

@@ -23,16 +23,17 @@ namespace GC_Automatic_ToolKit.Handler
 
         public static void ConnectToAcqClient()
         {
-
             try
             {
                 //_acqClient = (IPnwAcqClient)Interaction.GetObject(null, "TCAcqClient.Server");
                 _acqClient = (IPnwAcqClient)Marshal.GetActiveObject("TCAcqClient.Server");
+                log.Debug("ConnectToAcqClient through GetActiveObject method");
             }
             catch (Exception)
             {
                 //_acqClient = (IPnwAcqClient)Interaction.CreateObject("TCAcqClient.Server");
                 _acqClient = (IPnwAcqClient)Activator.CreateInstance(Type.GetTypeFromProgID("TCAcqClient.Server"));
+                log.Debug("ConnectToAcqClient through CreateInstance method");
             }
         }
 
@@ -59,12 +60,19 @@ namespace GC_Automatic_ToolKit.Handler
         
         internal static PnwGcStates GetGCStatus(string bstInstKey)
         {
+            log.Debug("Enter GetGCStstus method");
+
             ConnectToAcqClient();
 
-            var data = Activator.CreateInstance(typeof(PnwStatusDataGcPub));
-
-
             var status = _acqClient.GetStatusData(bstInstKey, (int)PnwStatusDataTypes.ePnwStatusDataGc, ref _data);
+
+            log.Debug("Return value of GetStatusData: " + status.ToString());
+
+            if (_data == null)
+            {
+                log.Error("GetStatusData failed");
+                log.Info("bstInstKey: " + bstInstKey);
+            }
 
             // To Newcomers,
             // I tried to use bulit-in structs (e.g. PnwStatusDataGcPub...) to parse retrived object "data" into these structs,
@@ -94,6 +102,8 @@ namespace GC_Automatic_ToolKit.Handler
 
         internal static string GetResultFilePath(string bstInstKey)
         {
+            log.Debug("Enter GetResultFilePath method");
+
             ConnectToAcqClient();
 
             var status = _acqClient.GetSequenceData(bstInstKey, (int)PnwSeqDataTypes.ePnwSeqDataAll, ref _data);

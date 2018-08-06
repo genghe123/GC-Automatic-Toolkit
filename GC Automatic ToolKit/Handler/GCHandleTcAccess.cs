@@ -8,27 +8,29 @@ namespace GC_Automatic_ToolKit.Handler
 {
     internal static class GcHandleTcAccess
     {
-
         private static log4net.ILog log = log4net.LogManager.GetLogger("GcHandleTcAccess");
 
         static GcHandleTcAccess()
         {
-
+            DirectoryInfo PERootDirectoryInfo = null;
             try
             {
+                PERootDirectoryInfo = new DirectoryInfo(Environment.GetEnvironmentVariable("HOMEDRIVE") + @"\PenExe\TcWS\");
                 DirectoryInfo dllDirectory = null;
-                foreach (var sub in new DirectoryInfo(Environment.GetEnvironmentVariable("HOMEDRIVE") + @"PenExe\TcWS\").GetDirectories())
+
+                foreach (var sub in PERootDirectoryInfo.GetDirectories())
                 {
                     if (sub.Name.Contains("Ver")) dllDirectory = new DirectoryInfo(sub.FullName + @"\Bin");
                 }
                 DllFileInfo = new FileInfo(dllDirectory.FullName+@"\TcAccess.dll");
-                
             }
             catch (Exception)
             {
-
-                throw;
+                log.Error("Load TcAccess.dll failed");
+                log.Info("SpecifiedDirectory: " + PERootDirectoryInfo.FullName);
             }
+
+            LoadLib();
 
         }
 
@@ -65,6 +67,7 @@ namespace GC_Automatic_ToolKit.Handler
             _instance = LoadLibraryExA(dllPath, temPtr, 0x00000008);
             if (_instance.ToInt32() == 0)
             {
+                log.Error("LoadLibraryExa failed");
                 throw new Exception("请在Config中配置引擎DLL的路径!");
             }
         }
@@ -164,10 +167,9 @@ namespace GC_Automatic_ToolKit.Handler
 
         private static IntPtr TcAccessInitial(string pattern, PerkinElmerConfig config)
         {
-            LoadLib();
-            log.Debug("LoadLib");
+            log.Debug("Enter TcAccessInitial method");
+
             TcAccessInit().Invoke();
-            log.Debug("TcAccessInit().Invoke() invoked");
             if (!TcAccessLoggedOn().Invoke())
             {
                 VbTcAccessLogon().Invoke(config.UserId, config.Password);
@@ -183,6 +185,8 @@ namespace GC_Automatic_ToolKit.Handler
 
         private static void TcAccessSet(IntPtr handle, string item, string value)
         {
+            log.Debug("Enter TcAccessSet method");
+
             try
             {
                 if (VbTcAccessSet().Invoke(handle, item, value) != 0)
@@ -191,6 +195,7 @@ namespace GC_Automatic_ToolKit.Handler
             }
             catch (FileNotFoundException e)
             {
+                log.Error("TcAccessSet failed");
                 Console.WriteLine(e.Message);
                 //todo Add manually select file
             }
@@ -198,6 +203,8 @@ namespace GC_Automatic_ToolKit.Handler
 
         private static string TcAccessGet(IntPtr handle, string item)
         {
+            log.Debug("Enter TcAccessGet method");
+
             try
             {
                 if (VbTcAccessGet().Invoke(handle, item, out var value) != 0)
@@ -206,21 +213,26 @@ namespace GC_Automatic_ToolKit.Handler
             }
             catch (ArgumentException e)
             {
-                Console.WriteLine(e.Message);
+                log.Error(e.Message);
             }
             return null;
         }
 
         internal static IEnumerable<KeyValuePair<string, double>> ReadAllPeaksAreaFromRst(string path, PerkinElmerConfig config)
         {
-            log.Debug("Enter ReadAllPeak Method");
+            log.Debug("Enter ReadAllPeaksAreaFromRst method");
+
             var handle = TcAccessInitial("RST", config);
-            log.Debug("TcAccessInitial RST complete");
             TcAccessSet(handle, "FILE_NAME", path);
             if (!int.TryParse(TcAccessGet(handle, "RST_NUM_PEAKS"), out var peaknums))
+            {
+                log.Error("TcAccessGet(handle,RST_NUM_PEAKS) failed");
                 return null;
+            }
 
-            var list = new List<KeyValuePair<string,double>>(100);
+            log.Debug("PeakNums: " + peaknums);
+
+            var list = new List<KeyValuePair<string,double>>(4);
 
             for (var i = 0; i < peaknums; i++)
             {

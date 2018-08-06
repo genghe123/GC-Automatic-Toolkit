@@ -91,7 +91,7 @@
             this.WaitingTime.Name = "WaitingTime";
             this.WaitingTime.Size = new System.Drawing.Size(68, 21);
             this.WaitingTime.TabIndex = 4;
-            this.toolTip1.SetToolTip(this.WaitingTime, "GC采样完成后至下次进样前等待时间\r\nDefault:30s");
+            this.toolTip1.SetToolTip(this.WaitingTime, "GC采样完成后至下次进样前等待时间\r\nDefault:0s");
             this.WaitingTime.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Sequence_textbox_KeyPress);
             // 
             // Peroid_label
@@ -144,20 +144,20 @@
             this.runToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsToolStripMenuItem});
             this.runToolStripMenuItem.Name = "runToolStripMenuItem";
-            this.runToolStripMenuItem.Size = new System.Drawing.Size(42, 22);
+            this.runToolStripMenuItem.Size = new System.Drawing.Size(40, 22);
             this.runToolStripMenuItem.Text = "Run";
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(47, 22);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 22);
             this.helpToolStripMenuItem.Text = "Help";
             // 
             // TimeProgressBar

@@ -14,14 +14,14 @@ namespace GC_Automatic_ToolKit
 {
     internal static class Runtime
     {
+        private static log4net.ILog log = log4net.LogManager.GetLogger("Runtime");
+
         private static ExcelHandle _excelhandle;
         private static Task _posthandle;
         private static CancellationTokenSource _cancellation;
         private static Timer _timer;
         private static Timer bartimer;
         private static MainForm form;
-
-
 
         static Runtime()
         {
@@ -48,12 +48,17 @@ namespace GC_Automatic_ToolKit
             _cancellation.CancelAfter(TimeSpan.FromMilliseconds((Gc.Peroid + Gc.Interval) * 60000));
             _timer.Interval = Gc.Peroid * 60000;
             bartimer.Interval = _timer.Interval / 100;
+
+            log.Info("Run Peroid: " + Gc.Peroid);
+            log.Info("Run Times: " + Gc.Max);
+            log.Info("Run Interal: " + Gc.Interval);
+
             Start();
         }
 
         private static void Start()
         {
-            //GCHandleAcqClient.StartRun(Gc.InstrumentKey);
+            GCHandleAcqClient.StartRun(Gc.InstrumentKey);
             _timer.Start();
             bartimer.Start();
         }
@@ -61,19 +66,21 @@ namespace GC_Automatic_ToolKit
         internal static void Tick()
         {
             Thread.Sleep(5000);
-            //GCHandleAcqClient.StopRun(Gc.InstrumentKey);
-            //_posthandle = Task.Run(() => ReadDataFromRstFile(Gc.ResultPath, _cancellation.Token));
-            ReadDataFromRstFile(Gc.ResultPath, _cancellation.Token);
+            GCHandleAcqClient.StopRun(Gc.InstrumentKey);
+            _posthandle = Task.Run(() => ReadDataFromRstFile(Gc.ResultPath, _cancellation.Token));
+            //ReadDataFromRstFile(Gc.ResultPath, _cancellation.Token);
 
             if (++Gc.K < Gc.Max + 1)
             {
-                Thread.Sleep((int)(Gc.Interval));
+                Thread.Sleep((int)(Gc.Interval*60000));
                 Start();
             }
         }
 
         private static bool ReadDataFromRstFile(DirectoryInfo rstdirinfo, CancellationToken token)
         {
+            log.Debug("Enter ReadDataFromRstFile method");
+
             Thread.Sleep(15000);
             FileInfo[] files = null;
             try
@@ -95,6 +102,7 @@ namespace GC_Automatic_ToolKit
 
             if (files is null || files.Length == 0)
             {
+                log.Error("ReadDataFromRstFile get result file failed");
                 return false;
             }
 
@@ -103,6 +111,7 @@ namespace GC_Automatic_ToolKit
                          select f).Take(1).ToArray();
 
             form.Output(lastestFile[0].FullName);
+            log.Debug("ResultFile: " + lastestFile[0].FullName);
 
             var result = GcHandleTcAccess.ReadAllPeaksAreaFromRst(lastestFile[0].FullName, Gc);
             _excelhandle.AddStringDoublePair(result, Gc.K, 2);
