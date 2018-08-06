@@ -53,7 +53,7 @@ namespace GC_Automatic_ToolKit
 
         private static void Start()
         {
-            GCHandleAcqClient.StartRun(Gc.InstrumentKey);
+            //GCHandleAcqClient.StartRun(Gc.InstrumentKey);
             _timer.Start();
             bartimer.Start();
         }
@@ -61,9 +61,9 @@ namespace GC_Automatic_ToolKit
         internal static void Tick()
         {
             Thread.Sleep(5000);
-            GCHandleAcqClient.StopRun(Gc.InstrumentKey);
-            _posthandle = Task.Run(() => ReadDataFromRstFile(Gc.ResultPath, _cancellation.Token));
-            //ReadDataFromRstFile(Gc.ResultPath, cancellation.Token);
+            //GCHandleAcqClient.StopRun(Gc.InstrumentKey);
+            //_posthandle = Task.Run(() => ReadDataFromRstFile(Gc.ResultPath, _cancellation.Token));
+            ReadDataFromRstFile(Gc.ResultPath, _cancellation.Token);
 
             if (++Gc.K < Gc.Max + 1)
             {
@@ -74,7 +74,6 @@ namespace GC_Automatic_ToolKit
 
         private static bool ReadDataFromRstFile(DirectoryInfo rstdirinfo, CancellationToken token)
         {
-            form.Output(rstdirinfo.ToString());
             Thread.Sleep(15000);
             FileInfo[] files = null;
             try
@@ -102,6 +101,8 @@ namespace GC_Automatic_ToolKit
             var lastestFile = (from f in files
                          orderby f.CreationTime descending
                          select f).Take(1).ToArray();
+
+            form.Output(lastestFile[0].FullName);
 
             var result = GcHandleTcAccess.ReadAllPeaksAreaFromRst(lastestFile[0].FullName, Gc);
             _excelhandle.AddStringDoublePair(result, Gc.K, 2);

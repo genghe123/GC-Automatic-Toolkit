@@ -165,11 +165,14 @@ namespace GC_Automatic_ToolKit.Handler
         private static IntPtr TcAccessInitial(string pattern, PerkinElmerConfig config)
         {
             LoadLib();
+            log.Debug("LoadLib");
             TcAccessInit().Invoke();
+            log.Debug("TcAccessInit().Invoke() invoked");
             if (!TcAccessLoggedOn().Invoke())
             {
                 VbTcAccessLogon().Invoke(config.UserId, config.Password);
             }
+            log.Debug(TcAccessLoggedOn().Invoke());
             return VbTcAccessOpenConversation().Invoke(pattern);
         }
 
@@ -210,13 +213,14 @@ namespace GC_Automatic_ToolKit.Handler
 
         internal static IEnumerable<KeyValuePair<string, double>> ReadAllPeaksAreaFromRst(string path, PerkinElmerConfig config)
         {
+            log.Debug("Enter ReadAllPeak Method");
             var handle = TcAccessInitial("RST", config);
-
+            log.Debug("TcAccessInitial RST complete");
             TcAccessSet(handle, "FILE_NAME", path);
             if (!int.TryParse(TcAccessGet(handle, "RST_NUM_PEAKS"), out var peaknums))
                 return null;
 
-            var list = new List<KeyValuePair<string,double>>(4);
+            var list = new List<KeyValuePair<string,double>>(100);
 
             for (var i = 0; i < peaknums; i++)
             {
