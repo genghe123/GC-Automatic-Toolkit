@@ -65,7 +65,7 @@ namespace GC_Automatic_ToolKit
             _posthandle = Task.Run(() => ReadDataFromRstFile(Gc.ResultPath, _cancellation.Token));
             //ReadDataFromRstFile(Gc.ResultPath, cancellation.Token);
 
-            if (++Gc.K <= Gc.Max)
+            if (++Gc.K < Gc.Max + 1)
             {
                 Thread.Sleep((int)(Gc.Interval));
                 Start();
