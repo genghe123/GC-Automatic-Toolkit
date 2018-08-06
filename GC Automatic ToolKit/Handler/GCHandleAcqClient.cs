@@ -23,22 +23,17 @@ namespace GC_Automatic_ToolKit.Handler
 
         public static void ConnectToAcqClient()
         {
-            log.Debug("Initializing acqClient");
 
             try
             {
                 //_acqClient = (IPnwAcqClient)Interaction.GetObject(null, "TCAcqClient.Server");
                 _acqClient = (IPnwAcqClient)Marshal.GetActiveObject("TCAcqClient.Server");
-                log.Debug("Get TCAcqClient.Server");
             }
             catch (Exception)
             {
                 //_acqClient = (IPnwAcqClient)Interaction.CreateObject("TCAcqClient.Server");
                 _acqClient = (IPnwAcqClient)Activator.CreateInstance(Type.GetTypeFromProgID("TCAcqClient.Server"));
-                log.Debug("Create TCAcqClient.Server");
             }
-            log.Info("Initialized TCAcqClient.Server");
-            log.Debug("Server Status=" + Enum.ToObject(typeof(PnwServerStateTypes), _acqClient.GetServerState()));
         }
 
         internal static bool StartRun(string bstInstKey)
@@ -68,12 +63,8 @@ namespace GC_Automatic_ToolKit.Handler
 
             var data = Activator.CreateInstance(typeof(PnwStatusDataGcPub));
 
-            log.Debug("InstrumentKey=" + bstInstKey);
-            log.Debug("DataToGet: " + PnwStatusDataTypes.ePnwStatusDataGc + "  " + (int)PnwStatusDataTypes.ePnwStatusDataGc);
 
             var status = _acqClient.GetStatusData(bstInstKey, (int)PnwStatusDataTypes.ePnwStatusDataGc, ref _data);
-            log.Debug("GetGCStatus=" + status);
-            log.Debug("Retrived Data=" + _data);
 
             // To Newcomers,
             // I tried to use bulit-in structs (e.g. PnwStatusDataGcPub...) to parse retrived object "data" into these structs,
@@ -105,14 +96,8 @@ namespace GC_Automatic_ToolKit.Handler
         {
             ConnectToAcqClient();
 
-            log.Debug("InstrumentKey: " + bstInstKey);
-            log.Debug("DataToGet: " + PnwSeqDataTypes.ePnwSeqDataAll + "  " + (int)PnwSeqDataTypes.ePnwSeqDataAll);
-
             var status = _acqClient.GetSequenceData(bstInstKey, (int)PnwSeqDataTypes.ePnwSeqDataAll, ref _data);
             var resultstring = Encoding.ASCII.GetString((byte[])_data);
-
-            log.Debug("ResultFilePathStatus=" + status);
-            log.Debug("ResultFilePathRetriveString=" + resultstring);
 
             //var seq = BytesToStruct((byte[])data,typeof( PnwSeqDataPub));
             const string pattern = @"mth.*?(?<RawFile>\w{1}:[^:]*)(?<ResultFile>\w{1}:([\w\d\\\s`\!\@\#\$\%\^\&\*\+\-=_\./]+))";
