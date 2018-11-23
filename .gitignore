@@ -260,3 +260,5 @@ paket-files/
 __pycache__/
 *.pyc
 /GC7900/GC Automatic ToolKit
+*.doc
+*.cer

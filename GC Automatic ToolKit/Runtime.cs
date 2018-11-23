@@ -45,7 +45,7 @@ namespace GC_Automatic_ToolKit
         {
             Gc = config;
             Check();
-            _cancellation.CancelAfter(TimeSpan.FromMilliseconds((Gc.Peroid + Gc.Interval) * 60000));
+            //_cancellation.CancelAfter(TimeSpan.FromMilliseconds((Gc.Peroid + Gc.Interval) * 60000));
             _timer.Interval = Gc.Peroid * 60000;
             bartimer.Interval = _timer.Interval / 100;
             Start();
@@ -62,7 +62,8 @@ namespace GC_Automatic_ToolKit
         {
             Thread.Sleep(5000);
             GCHandleAcqClient.StopRun(Gc.InstrumentKey);
-            _posthandle = Task.Run(() => ReadDataFromRstFile(Gc.ResultPath, _cancellation.Token));
+            _posthandle = Task.Factory.StartNew(() => ReadDataFromRstFile(Gc.ResultPath, _cancellation.Token));
+            //_posthandle = Task.Run(() => ReadDataFromRstFile(Gc.ResultPath, _cancellation.Token));
             //ReadDataFromRstFile(Gc.ResultPath, cancellation.Token);
 
             if (++Gc.K <= Gc.Max)
