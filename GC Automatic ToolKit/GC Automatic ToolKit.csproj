@@ -161,6 +161,7 @@
     <Compile Include="GCConfig\PerkinElmerConfig.cs" />
     <Compile Include="Runtime.cs" />
     <Compile Include="Handler\XmlHandle.cs" />
+    <Compile Include="SoftUpdate.cs" />
     <Compile Include="UserInterface\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
