@@ -24,8 +24,9 @@ namespace GC_Automatic_ToolKit.Handler
                 {
                     if (sub.Name.Contains("Ver")) dllDirectory = new DirectoryInfo(sub.FullName + @"\Bin");
                 }
+                DllFileInfo = new FileInfo(dllDirectory.FullName + @"\TcAccess.dll");
             }
-            DllFileInfo = new FileInfo(dllDirectory.FullName + @"\TcAccess.dll");
+
         }
 
         private static readonly FileInfo DllFileInfo;
@@ -160,17 +161,12 @@ namespace GC_Automatic_ToolKit.Handler
 
         private static IntPtr TcAccessInitial(string pattern, PerkinElmerConfig config)
         {
-            log.Debug("Initialing TcAccess");
-
             LoadLib();
             TcAccessInit().Invoke();
             if (!TcAccessLoggedOn().Invoke())
             {
                 VbTcAccessLogon().Invoke(config.UserId, config.Password);
             }
-
-            log.Info("Initialed TcAccess");
-
             return VbTcAccessOpenConversation().Invoke(pattern);
         }
 
@@ -199,10 +195,7 @@ namespace GC_Automatic_ToolKit.Handler
             try
             {
                 if (VbTcAccessGet().Invoke(handle, item, out var value) != 0)
-                {
-                    log.Error("Item: " + item);
                     throw new ArgumentException("Invoking TcAccessGet failed.Please check InvokeMethod");
-                }
                 return Marshal.PtrToStringAnsi(value);
             }
             catch (ArgumentException e)

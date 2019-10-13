@@ -117,10 +117,20 @@ namespace GC_Automatic_ToolKit.UserInterface
             }
         }
 
-        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void sendFeedbackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(@"https://github.com/genghe123/GC-Automatic-Toolkit/issues");
+        }
+
+        private void systemSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var globalSettings = new GlobalSettings();
             globalSettings.ShowDialog();
+        }
+
+        private void runningSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var excelHandle = new Handler.ExcelHandle()
         }
     }
 }

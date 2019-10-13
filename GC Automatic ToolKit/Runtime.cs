@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -81,15 +80,7 @@ namespace GC_Automatic_ToolKit
             {
                 files = rstdirinfo.GetFiles("*.rst", SearchOption.AllDirectories);
             }
-            catch (ArgumentException e)
-            {
-                form.Output(e.ToString());
-            }
-            catch (DirectoryNotFoundException e)
-            {
-                form.Output(e.ToString());
-            }
-            catch (SecurityException e)
+            catch (Exception e)
             {
                 form.Output(e.ToString());
             }

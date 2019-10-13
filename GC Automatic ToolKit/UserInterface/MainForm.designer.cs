@@ -40,6 +40,7 @@
             this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sendFeedbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TimeProgressBar = new System.Windows.Forms.ProgressBar();
             this.RunTimes_textbox = new System.Windows.Forms.TextBox();
             this.RunTimes_label = new System.Windows.Forms.Label();
@@ -48,6 +49,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.systemSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runningSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -149,16 +152,27 @@
             // 
             // settingsToolStripMenuItem
             // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.systemSettingsToolStripMenuItem,
+            this.runningSettingsToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sendFeedbackToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(47, 22);
             this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // sendFeedbackToolStripMenuItem
+            // 
+            this.sendFeedbackToolStripMenuItem.Name = "sendFeedbackToolStripMenuItem";
+            this.sendFeedbackToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.sendFeedbackToolStripMenuItem.Text = "Send Feedback";
+            this.sendFeedbackToolStripMenuItem.Click += new System.EventHandler(this.sendFeedbackToolStripMenuItem_Click);
             // 
             // TimeProgressBar
             // 
@@ -238,6 +252,20 @@
             // 
             this.toolTip1.IsBalloon = true;
             // 
+            // systemSettingsToolStripMenuItem
+            // 
+            this.systemSettingsToolStripMenuItem.Name = "systemSettingsToolStripMenuItem";
+            this.systemSettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.systemSettingsToolStripMenuItem.Text = "SystemSettings";
+            this.systemSettingsToolStripMenuItem.Click += new System.EventHandler(this.systemSettingsToolStripMenuItem_Click);
+            // 
+            // runningSettingsToolStripMenuItem
+            // 
+            this.runningSettingsToolStripMenuItem.Name = "runningSettingsToolStripMenuItem";
+            this.runningSettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.runningSettingsToolStripMenuItem.Text = "RunningSettings";
+            this.runningSettingsToolStripMenuItem.Click += new System.EventHandler(this.runningSettingsToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -282,5 +310,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sendFeedbackToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem systemSettingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem runningSettingsToolStripMenuItem;
     }
 }

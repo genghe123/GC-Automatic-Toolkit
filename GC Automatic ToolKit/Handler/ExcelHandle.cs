@@ -45,6 +45,20 @@ namespace GC_Automatic_ToolKit.Handler
             _worksheet = (Worksheet)_workbook.Sheets[1];
             _worksheet.Name = DateTime.Today.ToString("yyyy.MM.dd");
         }
+
+        public void CreateExcel(String worksheetName)
+        {
+            CreateExcel();
+            _worksheet.Name = @"Config";
+
+            String[] title = {"No","周期", "运行次数", "下次运行前等待时间", "进入下一阶段前等待时间" };
+
+            for(int col = 1; col <= title.Length; col++)
+            {
+                _worksheet.Cells[1, col] = title[col - 1];
+            }
+        }
+
         public void SaveExcel()
         {
             //workbook.SaveAs(String.Concat(path, filename, ".xlsx"));
